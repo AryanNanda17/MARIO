@@ -46,8 +46,6 @@ else
     git clone -b release/v5.1 --recursive https://github.com/espressif/esp-idf.git
     cd $HOME/esp/esp-idf
     ./install.sh esp32
-    popd
-    popd
 
     # Check if installation is successful
     . $HOME/esp/esp-idf/export.sh 
@@ -65,6 +63,8 @@ if [ ! -d "$HOME/MARIO" ]; then
 else 
     echo "You already have Cloned MARIO!"
 fi
+
+unameOut="$(uname -s)"
 
 # ROS2 Installation
 case "${unameOut}" in
