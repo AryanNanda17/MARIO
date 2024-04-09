@@ -57,10 +57,10 @@ else
 fi
 
 # Clone Mario repository
-if [ ! -d "tmp/MARIO" ]; then
+if [ ! -d "tmp/ros2_ws" ]; then
     cd "$HOME" || (echo "Error: Could not navigate to Home" && exit 1)
     echo "Cloning Mario"
-    git clone --recursive https://github.com/AryanNanda17/MARIO.git /tmp/ros2_ws
+    git clone --recursive https://github.com/SRA-VJTI/MARIO.git /tmp/ros2_ws
 else 
     echo "You already have Cloned MARIO!"
 fi
