@@ -57,7 +57,7 @@ else
 fi
 
 # Clone Mario repository
-if [ ! -d "$HOME/MARIO" ]; then
+if [ ! -d "tmp/MARIO" ]; then
     cd "$HOME" || (echo "Error: Could not navigate to Home" && exit 1)
     echo "Cloning Mario"
     git clone --recursive https://github.com/AryanNanda17/MARIO.git /tmp/ros2_ws
@@ -67,81 +67,86 @@ fi
 
 unameOut="$(uname -s)"
 
-# ROS2 Installation
+#!/bin/bash
+
+# Check the operating system
+unameOut="$(uname -s)"
 case "${unameOut}" in
     Linux*)
-        echo "Installing ROS 2 for Linux"
-        
-        # Check for UTF-8 locale
-        locale
-        
-        sudo apt update && sudo apt install locales
-        sudo locale-gen en_US en_US.UTF-8
-        sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-        export LANG=en_US.UTF-8
-        
-        locale  # verify settings
-        
-        sudo apt install software-properties-common
-        sudo add-apt-repository universe
-        
-        sudo apt update && sudo apt install curl -y
-        sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-        
-        sudo apt update
-        sudo apt upgrade
-        sudo apt install ros-humble-desktop
-        echo "source /opt/ros/humble/setup.bash" >> $HOME/."$_shell_"rc
+        echo "Checking if ROS 2 is installed..."
+        # Check if ROS 2 is already installed
+        if ! conda activate ros_env && command -v ros2 &>/dev/null; then
+            echo "ROS 2 is not installed. Proceeding with installation..."
+            
+            # Check for UTF-8 locale
+            locale
+            sudo apt update && sudo apt install locales
+            sudo locale-gen en_US en_US.UTF-8
+            sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+            export LANG=en_US.UTF-8
+            locale  # verify settings
+            
+            # Add ROS 2 repository
+            sudo apt install software-properties-common
+            sudo add-apt-repository universe
+            sudo apt update && sudo apt install curl -y
+            sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+            sudo apt update
+            sudo apt upgrade
+            
+            # Install ROS 2
+            sudo apt install ros-humble-desktop
+            echo "source /opt/ros/humble/setup.bash" >> $HOME/."$_shell_"rc
 
-        # Install additional important ros2 packages 
-        echo "Installing Additional Ros2 packages"
-        sudo apt install ros-humble-desktop-full ros-humble-control* ros-humble-gazebo-ros2-control ros-humble-joint-state-* ros-humble-forward-command-controller ros-humble-robot-state-publisher ros-humble-robot-controllers*
+            # Install additional ROS 2 packages 
+            echo "Installing Additional Ros2 packages"
+            sudo apt install ros-humble-desktop-full ros-humble-control* ros-humble-gazebo-ros2-control ros-humble-joint-state-* ros-humble-forward-command-controller ros-humble-robot-state-publisher ros-humble-robot-controllers*
+            echo "ROS 2 installed successfully."
+        else
+            echo "ROS 2 is already installed."
+        fi
         ;;
     Darwin*)
-        echo "Installing miniconda"
-        # Install Miniconda
-        if [ -d "$HOME/miniconda3" ]; then
-            echo "Miniconda is already installed."
+        echo "Checking if ROS 2 is installed..."
+        # Check if ROS 2 is already installed
+        if ! conda activate ros_env && command -v ros2 &>/dev/null; then
+            echo "ROS 2 is not installed. Proceeding with installation..."
+            
+            # Installing mambaforge
+            echo "Installing mambaforge"
+            if command -v mamba &>/dev/null; then
+                echo "Mambaforge is already installed"
+            else
+                echo "Installing Mambaforge"
+                wget -q https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh -O mambaforge.sh
+                chmod +x mambaforge.sh
+                ./mambaforge.sh 
+                rm mambaforge.sh
+                echo "Mambaforge installed"
+                echo "Initializing Mambaforge"
+                export PATH="$HOME/mambaforge/bin:$PATH"
+                mamba init --all
+                echo "$green Mambaforge initialized. ReOpen a new terminal, and Please re-run the installation script for further configuration"
+                exit 0
+            fi
+            
+            # Install mamba if not installed already
+            conda install mamba -c conda-forge
+            mamba create -n ros_env -c conda-forge
+            source $HOME/mambaforge/etc/profile.d/conda.sh
+            conda activate ros_env
+            conda config --env --add channels conda-forge
+            conda config --env --add channels robostack-staging
+            conda config --env --remove channels defaults || true
+
+            # Install ROS packages
+            mamba install ros-humble-desktop-full
+            mamba install -n ros_env -y ros-humble-desktop-full ros-humble-control-* ros-humble-gazebo-ros2-control ros-humble-joint-state-* ros-humble-forward-command-controller ros-humble-robot-state-publisher 
+            echo "ROS 2 installed successfully."
         else
-            echo "Installing Miniconda"
-            cd ~
-            curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh -o Miniconda3-latest-MacOSX-arm64.sh
-            chmod +x Miniconda3-latest-MacOSX-arm64.sh
-            ./Miniconda3-latest-MacOSX-arm64.sh -b -p "$HOME/miniconda3"
-            rm Miniconda3-latest-MacOSX-arm64.sh
-            echo "Miniconda is successfully installed"
-            echo "MiniConda initialized. ReOpen a new terminal, and please re-run the installation script for further configuration"
+            echo "ROS 2 is already installed."
         fi
-
-        # Activate Miniconda environment in a new shell session
-        if [ -d "$HOME/miniconda3" ]; then
-            echo "Activating Miniconda environment"
-            source "$HOME/miniconda3/bin/activate"
-        fi
-
-        # Name of the conda environment
-        env_name="ros_env"
-        if ! conda env list | grep -q "\b$env_name\b"; then
-            # If the environment doesn't exist, create it
-            echo "Creating conda environment $env_name"
-            conda create --name $env_name
-        else
-            echo "Conda environment $env_name already exists."
-        fi
-
-        # Installing ROS packages in the conda environment
-        conda activate $env_name
-        conda config --env --add channels conda-forge
-        conda config --env --add channels robostack-staging
-        conda config --env --remove channels defaults
-        conda install ros-humble-desktop
-        conda deactivate
-        conda activate $env_name
-
-        # Install additional important ros2 packages
-        echo "Installing Additional Ros2 packages"
-        conda install ros-humble-desktop-full ros-humble-control-* ros-humble-gazebo-ros2-control ros-humble-joint-state-* ros-humble-forward-command-controller ros-humble-robot-state-publisher 
         ;;
     *)
         echo "ROS 2 installation is not supported on this operating system."
@@ -149,54 +154,49 @@ case "${unameOut}" in
         ;;
 esac
 
-# Creating a ros2_ws
-case "${unameOut}" in
-    Linux*)
-        echo "Creating a ros2_ws"
-        sudo apt update 
-        sudo apt install python3-colcon-common-extensions rosdep
-        echo "source  /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> $HOME/."$_shell_"rc
-        mkdir ~/ros2_ws
-        cd ~/ros2_ws
-        mkdir src 
-        colcon build
-        echo "source  ~/ros2_ws/install/setup.bash" >> $HOME/."$_shell_"rc
-        ;;
-    Darwin*)
-        echo "Creating a ros2_ws"
-        conda activate ros_env
-        conda install colcon-common-extensions rosdep
-        # Creating a ros2_ws
-        mkdir ~/ros2_ws
-        cd ~/ros2_ws
-        mkdir src 
-        colcon build
-        ;;
-    *)
-        echo "ros2_ws couldn't be setup"
-        exit 1
-        ;;
-esac
 
-# Installig Gazebo
-case "${unameOut}" in
-    Linux*)
+
+# Verify if ros2_ws already exists
+if [ -d "$HOME/ros2_ws" ]; then
+    echo "ros2_ws already exists."
+else
+    case "${unameOut}" in
+        Linux*)
+            echo "Creating a ros2_ws"
+            sudo apt update 
+            sudo apt install python3-colcon-common-extensions rosdep
+            echo "source  /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> $HOME/."$_shell_"rc
+            mkdir ~/ros2_ws
+            cd ~/ros2_ws
+            mkdir src 
+            colcon build
+            echo "source  ~/ros2_ws/install/setup.bash" >> $HOME/."$_shell_"rc
+            ;;
+        Darwin*)
+            echo "Creating a ros2_ws"
+            # ROS2 Workspace creation on MacOS
+            echo "Creating a ros2_ws on MacOS is not supported."
+            exit 1
+            ;;
+        *)
+            echo "ros2_ws couldn't be setup"
+            exit 1
+            ;;
+    esac
+fi
+
+# Installig Gazebo if not already installed
+if [ "$unameOut" == "Linux" ]; then
+    if ! command -v gazebo &> /dev/null; then
         echo "Installing Gazebo"
         curl -sSL http://get.gazebosim.org | sh
-        ;;
-    Darwin*)
-        echo "Installing Gazebo"
-        conda activate ros_env
-        curl -ssL http://get.gazebosim.org | sh
-        ;;
-    *)
-        echo "Gazebo couldn't be setup"
-        exit 1
-        ;;
-esac
+        echo "Gazebo installed successfully"
+    else
+        echo "Gazebo is already installed"
+    fi
+fi
 
 # Copying Mario's folders to ros2_ws
-
 cd ~/ros2_ws/src
 if [[ ! -d "1_chatter_listener" ]]; then
     mv /tmp/ros2_ws/1_* $HOME/ros2_ws/src
@@ -222,28 +222,22 @@ if [[ ! -d "1_chatter_listener" ]]; then
     fi
     cd ..
     colcon build
-
+    rm -rf /tmp/ros_ws
+fi
 
 # Setting up microros_ws
 case "${unameOut}" in
     Linux*)
-        echo "Creating a microros_ws"
-        mkdir -p microros_ws/src
-        cd microros_ws/src
+        echo "Cloning microrosagent"
         git clone -b humble https://github.com/micro-ROS/micro-ROS-Agent.git
         sudo apt update && rosdep update
         cd ..
-        rosdep install --from-paths src --ignore-src -y
         pip3 install catkin_pkg lark-parser colcon-common-extensionsls -l rosdep
+        rosdep install --from-paths src --ignore-src -y
         ;;
     Darwin*)
-        echo "Creating a microros_ws"
-        mkdir -p microros_ws/src 
-        cd microros_ws/src
+        echo "Cloning microrosagent"
         git clone -b humble https://github.com/micro-ROS/micro-ROS-Agent.git
-        
-        # Pending
-
         ;;
     *)
         echo "micros_ws couldn't be setup"
