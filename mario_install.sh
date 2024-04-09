@@ -12,7 +12,9 @@ echo "Installing ESP IDF"
 _shell_="${SHELL#${SHELL%/*}/}"
 # Check whether esp-idf has already been installed
 if [ -d $HOME/esp/esp-idf ]; then
+    echo "${red}======================"
     echo "You already have installed esp-idf!"
+    echo "${red}======================"
 else
     # System Detection and ESP-IDF Installation
     unameOut="$(uname -s)"
@@ -50,8 +52,10 @@ else
 
     # Check if installation is successful
     . $HOME/esp/esp-idf/export.sh 
+    echo "${red}======================"
     idf.py --version | (grep "v5.1.2" && echo "Installation successful! Please restart your computer for the changes to take effect.") \
         || (echo "Installation failed" && exit 1) 
+    echo "${red}======================"
     # Set IDF Alias
     echo "alias get_idf='. $HOME/esp/esp-idf/export.sh'" >> $HOME/."$_shell_"rc
 fi
@@ -59,7 +63,9 @@ fi
 # Clone Mario repository
 if [ ! -d "tmp/ros2_ws" ]; then
     cd "$HOME" || (echo "Error: Could not navigate to Home" && exit 1)
+    echo "${red}======================"
     echo "Cloning Mario"
+    echo "${red}======================"
     git clone --recursive https://github.com/SRA-VJTI/MARIO.git /tmp/ros2_ws
 else 
     echo "You already have Cloned MARIO!"
@@ -76,6 +82,7 @@ case "${unameOut}" in
         echo "Checking if ROS 2 is installed..."
         # Check if ROS 2 is already installed
         if ! conda activate ros_env && command -v ros2 &>/dev/null; then
+            echo "${red}======================"
             echo "ROS 2 is not installed. Proceeding with installation..."
             
             # Check for UTF-8 locale
@@ -102,15 +109,20 @@ case "${unameOut}" in
             # Install additional ROS 2 packages 
             echo "Installing Additional Ros2 packages"
             sudo apt install ros-humble-desktop-full ros-humble-control* ros-humble-gazebo-ros2-control ros-humble-joint-state-* ros-humble-forward-command-controller ros-humble-robot-state-publisher ros-humble-robot-controllers*
+            echo "${red}======================"
             echo "ROS 2 installed successfully."
+            echo "${red}======================"
         else
+            echo "${red}======================"
             echo "ROS 2 is already installed."
+            echo "${red}======================"
         fi
         ;;
     Darwin*)
         echo "Checking if ROS 2 is installed..."
         # Check if ROS 2 is already installed
         if ! conda activate ros_env && command -v ros2 &>/dev/null; then
+            echo "${red}======================"
             echo "ROS 2 is not installed. Proceeding with installation..."
             
             # Installing mambaforge
@@ -123,7 +135,9 @@ case "${unameOut}" in
                 chmod +x mambaforge.sh
                 ./mambaforge.sh 
                 rm mambaforge.sh
+                echo "${red}======================"
                 echo "Mambaforge installed"
+                echo "${red}======================"
                 echo "Initializing Mambaforge"
                 export PATH="$HOME/mambaforge/bin:$PATH"
                 mamba init --all
@@ -141,11 +155,15 @@ case "${unameOut}" in
             conda config --env --remove channels defaults || true
 
             # Install ROS packages
-            mamba install ros-humble-desktop-full
-            mamba install -n ros_env -y ros-humble-desktop-full ros-humble-control-* ros-humble-gazebo-ros2-control ros-humble-joint-state-* ros-humble-forward-command-controller ros-humble-robot-state-publisher 
+            sudo mamba install ros-humble-desktop-full
+            sudo mamba install -n ros_env -y ros-humble-desktop-full ros-humble-control-msgs ros-humble-control-toolbox ros-humble-gazebo-ros2-control ros-humble-joint-state-broadcaster ros-humble-joint-state-publisher ros-humble-joint-state-publisher-gui ros-humble-forward-command-controller ros-humble-robot-state-publisher 
+            echo "${red}======================"
             echo "ROS 2 installed successfully."
+            echo "${red}======================"
         else
+            echo "${red}======================"
             echo "ROS 2 is already installed."
+            echo "${red}======================"
         fi
         ;;
     *)
@@ -154,15 +172,15 @@ case "${unameOut}" in
         ;;
 esac
 
-
-
 # Verify if ros2_ws already exists
 if [ -d "$HOME/ros2_ws" ]; then
     echo "ros2_ws already exists."
 else
     case "${unameOut}" in
         Linux*)
+            echo "${red}======================"
             echo "Creating a ros2_ws"
+            echo "${red}======================"
             sudo apt update 
             sudo apt install python3-colcon-common-extensions rosdep
             echo "source  /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> $HOME/."$_shell_"rc
@@ -173,7 +191,9 @@ else
             echo "source  ~/ros2_ws/install/setup.bash" >> $HOME/."$_shell_"rc
             ;;
         Darwin*)
+            echo "${red}======================"
             echo "Creating a ros2_ws"
+            echo "${red}======================"
             # ROS2 Workspace creation on MacOS
             echo "Creating a ros2_ws on MacOS is not supported."
             exit 1
@@ -188,11 +208,17 @@ fi
 # Installig Gazebo if not already installed
 if [ "$unameOut" == "Linux" ]; then
     if ! command -v gazebo &> /dev/null; then
+        echo "${red}======================" 
         echo "Installing Gazebo"
+        echo "${red}======================"
         curl -sSL http://get.gazebosim.org | sh
+        echo "${red}======================"
         echo "Gazebo installed successfully"
+        echo "${red}======================"
     else
+        echo "${red}======================"
         echo "Gazebo is already installed"
+        echo "${red}======================"
     fi
 fi
 
@@ -221,23 +247,36 @@ if [[ ! -d "1_chatter_listener" ]]; then
         echo "$green Ros Repository already existed and processed $reset"
     fi
     cd ..
+    source $HOME/mambaforge/etc/profile.d/conda.sh
+    conda activate ros_env
     colcon build
-    rm -rf /tmp/ros_ws
 fi
 
-# Setting up microros_ws
+# Setting up microrosagent
 case "${unameOut}" in
     Linux*)
         echo "Cloning microrosagent"
+        cd ~/ros2_ws/src
         git clone -b humble https://github.com/micro-ROS/micro-ROS-Agent.git
         sudo apt update && rosdep update
         cd ..
         pip3 install catkin_pkg lark-parser colcon-common-extensionsls -l rosdep
         rosdep install --from-paths src --ignore-src -y
+        echo "${red}======================"
+        echo "Done with cloning"
+        echo "${red}======================"
         ;;
     Darwin*)
+        echo "${red}======================"
         echo "Cloning microrosagent"
+        echo "${red}======================"
+        cd ~/ros2_ws/src
         git clone -b humble https://github.com/micro-ROS/micro-ROS-Agent.git
+        source $HOME/mambaforge/etc/profile.d/conda.sh
+        sudo conda install rosdep 
+        echo "${red}======================"
+        echo "Done with cloning"
+        echo "${red}======================"
         ;;
     *)
         echo "micros_ws couldn't be setup"
