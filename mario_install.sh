@@ -65,11 +65,12 @@ else
 fi
 
 # Clone Mario repository if not already cloned
-if [ ! -d "/tmp/ros2_ws" ]; then
+if [ ! -d "/ros2_ws" ]; then
     echo "${blue}======================$reset"
     echo "Cloning Mario"
     echo "${red}======================$reset"
-    git clone --recursive https://github.com/SRA-VJTI/MARIO.git /tmp/ros2_ws
+    cd ~
+    git clone --recursive https://github.com/SRA-VJTI/MARIO.git 
     echo "${blue}======================$reset"
     echo "Mario repo cloned successfully"
     echo "${red}======================$reset"
@@ -224,32 +225,29 @@ fi
 
 cd ~/ros2_ws/src
 if [[ ! -d "1_chatter_listener" ]]; then
-    mv /tmp/ros2_ws/1_* $HOME/ros2_ws/src
-	mv /tmp/ros2_ws/2_* $HOME/ros2_ws/src
-	mv /tmp/ros2_ws/3_* $HOME/ros2_ws/src
-	mv /tmp/ros2_ws/4_* $HOME/ros2_ws/src
-    mv /tmp/ros2_ws/activities $HOME/ros2_ws/src
+    mv ~/ros2_ws/1_* $HOME/ros2_ws/src
+	mv ~/ros2_ws/2_* $HOME/ros2_ws/src
+	mv ~/ros2_ws/3_* $HOME/ros2_ws/src
+	mv ~/ros2_ws/4_* $HOME/ros2_ws/src
+    mv ~/ros2_ws/activities $HOME/ros2_ws/src
     if [[ ! -d "$HOME/ros2_ws_firmware" ]]; then
         mkdir -p $HOME/ros2_ws_firmware
-        mv /tmp/ros2_ws/firmware/* $HOME/ros2_ws_firmware
+        mv ~/ros2_ws/firmware/* $HOME/ros2_ws_firmware
         echo "${red}======================$reset"
-        echo "$green Ros Repository cloned newly and processed : ESP32 Codes $reset"
+        echo "$green firmware copied to ros2_ws_firmware $reset"
     else 
         echo "${red}======================$reset"
-        echo "$green Already processed : ESP32 Codes $reset"
+        echo "$green Already copied $reset"
     fi
-    rm -rf /tmp/ros_ws
-        echo "${red}======================$reset"
-        echo "$green Ros Repository newly cloned and processed$reset"
+    echo "${red}======================$reset"
 else
     echo "${red}======================$reset"
-    echo "$green Ros Repository already existed and processed $reset"
+    echo "$green Ros folders are already copied $reset"
 fi
 cd ..
 source $HOME/mambaforge/etc/profile.d/conda.sh
 conda activate ros_env
 colcon build
-
 
 # Setting up microrosagent
 case "${unameOut}" in
