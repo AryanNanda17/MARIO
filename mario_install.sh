@@ -4,6 +4,7 @@ set -e
 
 red=`tput setaf 1`
 green=`tput setaf 2`
+blue=`tput setaf 4`
 reset=`tput sgr0`
 
 echo "Installing ESP IDF"
@@ -100,27 +101,47 @@ case "${unameOut}" in
     Darwin*)
         echo "Installing miniconda"
         # Install Miniconda
-        cd ~
-        curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh -o Miniconda3-latest-MacOSX-arm64.sh
-        chmod +x Miniconda3-latest-MacOSX-arm64.sh
-        ./Miniconda3-latest-MacOSX-arm64.sh
-        conda config --set auto_activate_base false
+        if [ -d "$HOME/miniconda3" ]; then
+            echo "Miniconda is already installed."
+        else
+            echo "Installing Miniconda"
+            cd ~
+            curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh -o Miniconda3-latest-MacOSX-arm64.sh
+            chmod +x Miniconda3-latest-MacOSX-arm64.sh
+            ./Miniconda3-latest-MacOSX-arm64.sh -b -p "$HOME/miniconda3"
+            rm Miniconda3-latest-MacOSX-arm64.sh
+            echo "Miniconda is successfully installed"
+            echo "MiniConda initialized. ReOpen a new terminal, and please re-run the installation script for further configuration"
+        fi
 
-        echo "Installing ROS 2 for macOS"
-        # Installing ROS 2 environment
-        conda create --name ros_env
-        conda activate ros_env
+        # Activate Miniconda environment in a new shell session
+        if [ -d "$HOME/miniconda3" ]; then
+            echo "Activating Miniconda environment"
+            source "$HOME/miniconda3/bin/activate"
+        fi
+
+        # Name of the conda environment
+        env_name="ros_env"
+        if ! conda env list | grep -q "\b$env_name\b"; then
+            # If the environment doesn't exist, create it
+            echo "Creating conda environment $env_name"
+            conda create --name $env_name
+        else
+            echo "Conda environment $env_name already exists."
+        fi
+
+        # Installing ROS packages in the conda environment
+        conda activate $env_name
         conda config --env --add channels conda-forge
         conda config --env --add channels robostack-staging
         conda config --env --remove channels defaults
         conda install ros-humble-desktop
         conda deactivate
-        conda activate ros_env
+        conda activate $env_name
 
         # Install additional important ros2 packages
         echo "Installing Additional Ros2 packages"
         conda install ros-humble-desktop-full ros-humble-control-* ros-humble-gazebo-ros2-control ros-humble-joint-state-* ros-humble-forward-command-controller ros-humble-robot-state-publisher 
-
         ;;
     *)
         echo "ROS 2 installation is not supported on this operating system."
@@ -156,8 +177,6 @@ case "${unameOut}" in
         exit 1
         ;;
 esac
-
-# Copying Mario's folders to ros2_ws
 
 # Installig Gazebo
 case "${unameOut}" in
