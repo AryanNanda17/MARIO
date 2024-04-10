@@ -232,14 +232,14 @@ if [[ ! -d "1_chatter_listener" ]]; then
         echo "${red}======================$reset"
         echo "Copying Mario's folders to ros2_ws"
         echo "${red}======================$reset"
-    mv $HOME/MARIO/1_* $HOME/ros2_ws/src
-	mv $HOME/MARIO/2_* $HOME/ros2_ws/src
-	mv $HOME/MARIO/3_* $HOME/ros2_ws/src
-	mv $HOME/MARIO/4_* $HOME/ros2_ws/src
-    mv $HOME/MARIO/activities $HOME/ros2_ws/src
+    cp $HOME/MARIO/1_* $HOME/ros2_ws/src
+	cp $HOME/MARIO/2_* $HOME/ros2_ws/src
+	cp $HOME/MARIO/3_* $HOME/ros2_ws/src
+	cp $HOME/MARIO/4_* $HOME/ros2_ws/src
+    cp $HOME/MARIO/activities $HOME/ros2_ws/src
     if [[ ! -d "$HOME/ros2_ws_firmware" ]]; then
         mkdir -p $HOME/ros2_ws_firmware
-        mv $HOME/MARIO/firmware/* $HOME/ros2_ws_firmware
+        cp $HOME/MARIO/firmware/* $HOME/ros2_ws_firmware
         echo "${red}======================$reset"
         echo "$green firmware copied to ros2_ws_firmware $reset"
     else 
