@@ -130,7 +130,6 @@ case "${unameOut}" in
                 echo "Mambaforge is already installed"
                 echo "${red}======================$reset"
             else
-                echo "Installing Mambaforge"
                 wget -q https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh -O mambaforge.sh
                 chmod +x mambaforge.sh
                 ./mambaforge.sh 
@@ -198,6 +197,9 @@ else
             sudo chown -R $(whoami) $HOME/ros2_ws
             mkdir src 
             colcon build
+            echo "${red}======================$reset"
+            echo "ros2_ws successfully setup"
+            echo "${red}======================$reset"
             ;;
         *)
             echo "ros2_ws couldn't be setup"
@@ -227,6 +229,9 @@ fi
 
 cd $HOME/ros2_ws/src
 if [[ ! -d "1_chatter_listener" ]]; then
+        echo "${red}======================$reset"
+        echo "Copying Mario's folders to ros2_ws"
+        echo "${red}======================$reset"
     mv $HOME/MARIO/1_* $HOME/ros2_ws/src
 	mv $HOME/MARIO/2_* $HOME/ros2_ws/src
 	mv $HOME/MARIO/3_* $HOME/ros2_ws/src
@@ -250,6 +255,9 @@ cd ..
 source $HOME/mambaforge/etc/profile.d/conda.sh
 conda activate ros_env
 colcon build
+echo "${red}======================$reset"
+echo "Successfully copied mario's folders to ros2_ws"
+echo "${red}======================$reset"
 
 # Setting up microrosagent
 case "${unameOut}" in
