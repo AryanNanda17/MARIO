@@ -65,7 +65,7 @@ else
 fi
 
 # Clone Mario repository if not already cloned
-if [ ! -d "/ros2_ws" ]; then
+if [ ! -d "~/Mario" ]; then
     echo "${blue}======================$reset"
     echo "Cloning Mario"
     echo "${red}======================$reset"
@@ -111,7 +111,7 @@ case "${unameOut}" in
 
             # Install additional ROS 2 packages 
             echo "Installing Additional Ros2 packages"
-            sudo apt install -y ros-humble-desktop-full ros-humble-control-msgs ros-humble-control-toolbox ros-humble-gazebo-ros2-control ros-humble-joint-state-broadcaster ros-humble-joint-state-publisher ros-humble-joint-state-publisher-gui ros-humble-forward-command-controller ros-humble-robot-state-publisher ros-humble-gazebo-ros2-control ros-humble-robot-controllers ros-humble-robot-controllers-interface ros-humble-robot-controllers-msgs
+            sudo apt install -y ros-humble-desktop-full ros-humble-control-msgs ros-humble-control-toolbox ros-humble-gazebo-ros2-control ros-humble-joint-state-broadcaster ros-humble-joint-state-publisher ros-humble-joint-state-publisher-gui ros-humble-forward-command-controller ros-humble-robot-state-publisher ros-humble-gazebo-ros2-control ros-humble-robot-controllers ros-humble-robot-controllers-interface ros-humble-robot-controllers-msgs ros-humble-joint-trajectory-controller ros-humble-controller-manager ros-humble-controller-manager-msgs
             echo "${red}======================$reset"
             echo "ROS 2 installed successfully."
             echo "${red}======================$reset"
@@ -225,14 +225,14 @@ fi
 
 cd ~/ros2_ws/src
 if [[ ! -d "1_chatter_listener" ]]; then
-    mv ~/ros2_ws/1_* $HOME/ros2_ws/src
-	mv ~/ros2_ws/2_* $HOME/ros2_ws/src
-	mv ~/ros2_ws/3_* $HOME/ros2_ws/src
-	mv ~/ros2_ws/4_* $HOME/ros2_ws/src
-    mv ~/ros2_ws/activities $HOME/ros2_ws/src
+    mv ~/Mario/1_* $HOME/ros2_ws/src
+	mv ~/Mario/2_* $HOME/ros2_ws/src
+	mv ~/Mario/3_* $HOME/ros2_ws/src
+	mv ~/Mario/4_* $HOME/ros2_ws/src
+    mv ~/Mario/activities $HOME/ros2_ws/src
     if [[ ! -d "$HOME/ros2_ws_firmware" ]]; then
         mkdir -p $HOME/ros2_ws_firmware
-        mv ~/ros2_ws/firmware/* $HOME/ros2_ws_firmware
+        mv ~/Mario/firmware/* $HOME/ros2_ws_firmware
         echo "${red}======================$reset"
         echo "$green firmware copied to ros2_ws_firmware $reset"
     else 
@@ -254,8 +254,6 @@ case "${unameOut}" in
     Linux*)
         echo "Cloning microrosagent"
         cd ~/ros2_ws/src
-        git clone -b humble https://github.com/micro-ROS/micro-ROS-Agent.git
-        sudo apt update && rosdep update
         cd ..
         pip3 install catkin_pkg lark-parser colcon-common-extensions -l rosdep
         rosdep install --from-paths src --ignore-src -y
