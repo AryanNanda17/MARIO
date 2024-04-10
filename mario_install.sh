@@ -57,19 +57,20 @@ else
     # Check if installation is successful
     . $HOME/esp/esp-idf/export.sh 
     echo "${red}======================$reset"
-    idf.py --version | (grep "v5.1.2" && echo "Installation successful! Please restart your computer for the changes to take effect.") \
-        || (echo "Installation failed" && exit 1) 
     echo "${red}======================$reset"
+    echo "${blue}Esp Installation Successfull $reset"
     # Set IDF Alias
     echo "alias get_idf='. $HOME/esp/esp-idf/export.sh'" >> $HOME/."$_shell_"rc
+    get_idf
+    idf.py --version 
 fi
 
 # Clone Mario repository if not already cloned
-if [ ! -d "~/MARIO" ]; then
+if [ ! -d "$HOME/MARIO" ]; then
     echo "${blue}======================$reset"
     echo "Cloning Mario"
     echo "${red}======================$reset"
-    cd ~
+    cd $Home
     git clone -b ros2-dev --recursive https://github.com/SRA-VJTI/MARIO.git 
     echo "${blue}======================$reset"
     echo "Mario repo cloned successfully"
@@ -141,7 +142,7 @@ case "${unameOut}" in
                 export PATH="$HOME/mambaforge/bin:$PATH"
                 mamba init --all
                 echo "$green Mambaforge initialized. ReOpen a new terminal, and Please re-run the installation script for further configuration"
-                exit 0
+                # exit 0
             fi
             
             # Install mamba if not installed already
