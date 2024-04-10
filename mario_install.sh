@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+!/usr/bin/env bash
 
 set -e
 
@@ -266,10 +266,8 @@ case "${unameOut}" in
         echo "Cloning microrosagent"
         echo "${red}======================$reset"
         cd ~/ros2_ws/src
-
+        pip3 install catkin_pkg lark-parser 
         git clone -b humble https://github.com/micro-ROS/micro-ROS-Agent.git
-        source $HOME/mambaforge/etc/profile.d/conda.sh
-        conda install rosdep 
         echo "${red}======================$reset"
         echo "Done with cloning microrosagent"
         echo "${red}======================$reset"
