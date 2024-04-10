@@ -65,12 +65,12 @@ else
 fi
 
 # Clone Mario repository if not already cloned
-if [ ! -d "~/Mario" ]; then
+if [ ! -d "~/MARIO" ]; then
     echo "${blue}======================$reset"
     echo "Cloning Mario"
     echo "${red}======================$reset"
     cd ~
-    git clone --recursive https://github.com/SRA-VJTI/MARIO.git 
+    git clone -b ros2-dev --recursive https://github.com/SRA-VJTI/MARIO.git 
     echo "${blue}======================$reset"
     echo "Mario repo cloned successfully"
     echo "${red}======================$reset"
@@ -225,14 +225,14 @@ fi
 
 cd ~/ros2_ws/src
 if [[ ! -d "1_chatter_listener" ]]; then
-    mv ~/Mario/1_* $HOME/ros2_ws/src
-	mv ~/Mario/2_* $HOME/ros2_ws/src
-	mv ~/Mario/3_* $HOME/ros2_ws/src
-	mv ~/Mario/4_* $HOME/ros2_ws/src
-    mv ~/Mario/activities $HOME/ros2_ws/src
+    mv ~/MARIO/1_* $HOME/ros2_ws/src
+	mv ~/MARIO/2_* $HOME/ros2_ws/src
+	mv ~/MARIO/3_* $HOME/ros2_ws/src
+	mv ~/MARIO/4_* $HOME/ros2_ws/src
+    mv ~/MARIO/activities $HOME/ros2_ws/src
     if [[ ! -d "$HOME/ros2_ws_firmware" ]]; then
         mkdir -p $HOME/ros2_ws_firmware
-        mv ~/Mario/firmware/* $HOME/ros2_ws_firmware
+        mv ~/MARIO/firmware/* $HOME/ros2_ws_firmware
         echo "${red}======================$reset"
         echo "$green firmware copied to ros2_ws_firmware $reset"
     else 
