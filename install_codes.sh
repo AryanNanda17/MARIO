@@ -71,7 +71,7 @@ if [ ! -d "$HOME/MARIO" ]; then
     echo "Cloning Mario"
     echo "${red}======================$reset"
     cd $Home
-    git clone -b ros2-dev --recursive https://github.com/SRA-VJTI/MARIO.git 
+    git clone -b humble --recursive https://github.com/SRA-VJTI/MARIO.git 
     echo "${blue}======================$reset"
     echo "Mario repo cloned successfully"
     echo "${red}======================$reset"
