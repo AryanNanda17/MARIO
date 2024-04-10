@@ -194,6 +194,7 @@ else
             # Creating a ros2_ws
             mkdir ~/ros2_ws
             cd ~/ros2_ws
+            sudo chown -R $(whoami) ~/ros2_ws
             mkdir src 
             colcon build
             ;;
