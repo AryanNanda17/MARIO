@@ -179,11 +179,11 @@ else
             sudo apt update 
             sudo apt install python3-colcon-common-extensions rosdep
             echo "source  /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> $HOME/."$_shell_"rc
-            mkdir ~/ros2_ws
-            cd ~/ros2_ws
+            mkdir $HOME/ros2_ws
+            cd $HOME/ros2_ws
             mkdir src 
             colcon build
-            echo "source  ~/ros2_ws/install/setup.bash" >> $HOME/."$_shell_"rc
+            echo "source  $HOME/ros2_ws/install/setup.bash" >> $HOME/."$_shell_"rc
             ;;
         Darwin*)
             echo "${blue}======================$reset"
@@ -193,9 +193,9 @@ else
             conda activate ros_env
             conda install colcon-common-extensions rosdep
             # Creating a ros2_ws
-            mkdir ~/ros2_ws
-            cd ~/ros2_ws
-            sudo chown -R $(whoami) ~/ros2_ws
+            mkdir $HOME/ros2_ws
+            cd $HOME/ros2_ws
+            sudo chown -R $(whoami) $HOME/ros2_ws
             mkdir src 
             colcon build
             ;;
@@ -225,16 +225,16 @@ fi
 
 # Copying Mario's folders to ros2_ws
 
-cd ~/ros2_ws/src
+cd $HOME/ros2_ws/src
 if [[ ! -d "1_chatter_listener" ]]; then
-    mv ~/MARIO/1_* $HOME/ros2_ws/src
-	mv ~/MARIO/2_* $HOME/ros2_ws/src
-	mv ~/MARIO/3_* $HOME/ros2_ws/src
-	mv ~/MARIO/4_* $HOME/ros2_ws/src
-    mv ~/MARIO/activities $HOME/ros2_ws/src
+    mv $HOME/MARIO/1_* $HOME/ros2_ws/src
+	mv $HOME/MARIO/2_* $HOME/ros2_ws/src
+	mv $HOME/MARIO/3_* $HOME/ros2_ws/src
+	mv $HOME/MARIO/4_* $HOME/ros2_ws/src
+    mv $HOME/MARIO/activities $HOME/ros2_ws/src
     if [[ ! -d "$HOME/ros2_ws_firmware" ]]; then
         mkdir -p $HOME/ros2_ws_firmware
-        mv ~/MARIO/firmware/* $HOME/ros2_ws_firmware
+        mv $HOME/MARIO/firmware/* $HOME/ros2_ws_firmware
         echo "${red}======================$reset"
         echo "$green firmware copied to ros2_ws_firmware $reset"
     else 
@@ -255,7 +255,7 @@ colcon build
 case "${unameOut}" in
     Linux*)
         echo "Cloning microrosagent"
-        cd ~/ros2_ws/src
+        cd $HOME/ros2_ws/src
         cd ..
         pip3 install catkin_pkg lark-parser colcon-common-extensions -l rosdep
         rosdep install --from-paths src --ignore-src -y
@@ -267,7 +267,7 @@ case "${unameOut}" in
         echo "${red}======================$reset"
         echo "Cloning microrosagent"
         echo "${red}======================$reset"
-        cd ~/ros2_ws/src
+        cd $HOME/ros2_ws/src
         pip3 install catkin_pkg lark-parser 
         git clone -b humble https://github.com/micro-ROS/micro-ROS-Agent.git
         echo "${red}======================$reset"
