@@ -257,7 +257,9 @@ else
     echo "$green Ros folders are already copied $reset"
 fi
 cd ..
-source $HOME/mambaforge/etc/profile.d/conda.sh
+if [ "$unameOut" == "Darwin" ];
+    source $HOME/mambaforge/etc/profile.d/conda.sh
+fi
 conda activate ros_env
 colcon build
 echo "${red}======================$reset"
