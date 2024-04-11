@@ -58,13 +58,13 @@ else
     . $HOME/esp/esp-idf/export.sh 
     echo "${red}======================$reset"
     echo "${red}======================$reset"
-    echo "${blue}Esp Installation Successfull $reset"
+    echo "${green}Esp Installation Successfull "
     # Set IDF Alias
     echo "alias get_idf='. $HOME/esp/esp-idf/export.sh'" >> $HOME/."$_shell_"rc
-    get_idf
+
     idf.py --version 
 fi
-
+echo "$reset"
 # Clone Mario repository if not already cloned
 if [ ! -d "$HOME/MARIO" ]; then
     echo "${blue}======================$reset"
@@ -107,12 +107,12 @@ case "${unameOut}" in
             sudo apt upgrade
             
             # Install ROS 2
-            sudo apt install ros-humble-desktop
+            sudo apt install ros-humble-desktop-full
             echo "source /opt/ros/humble/setup.bash" >> $HOME/."$_shell_"rc
 
             # Install additional ROS 2 packages 
             echo "Installing Additional Ros2 packages"
-            sudo apt install -y ros-humble-desktop-full ros-humble-control-msgs ros-humble-control-toolbox ros-humble-gazebo-ros2-control ros-humble-joint-state-broadcaster ros-humble-joint-state-publisher ros-humble-joint-state-publisher-gui ros-humble-forward-command-controller ros-humble-robot-state-publisher ros-humble-gazebo-ros2-control ros-humble-robot-controllers ros-humble-robot-controllers-interface ros-humble-robot-controllers-msgs ros-humble-joint-trajectory-controller ros-humble-controller-manager ros-humble-controller-manager-msgs
+            sudo apt install -y ros-humble-control-msgs ros-humble-control-toolbox ros-humble-gazebo-ros2-control ros-humble-joint-state-broadcaster ros-humble-joint-state-publisher ros-humble-joint-state-publisher-gui ros-humble-forward-command-controller ros-humble-robot-state-publisher ros-humble-gazebo-ros2-control ros-humble-robot-controllers ros-humble-robot-controllers-interface ros-humble-robot-controllers-msgs ros-humble-joint-trajectory-controller ros-humble-controller-manager ros-humble-controller-manager-msgs
             echo "${red}======================$reset"
             echo "ROS 2 installed successfully."
             echo "${red}======================$reset"
