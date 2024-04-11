@@ -21,9 +21,11 @@ ros2 run micro_ros_agent micro_ros_agent udp4 --port 8888
     * ``` cd MARIO/firmware/4_microros_gazebo ```
     * ```$IDF_PATH/export.sh``` (or ```get_idf``` if you have set up the alias in your `.bashrc` file)
     
-* Configure the micro-ROS settings 
-    * ```idf.py menuconfig```
-    * inside `micro-ROS Settings` Set up WiFi configuration (SSID and Password) and your IP address in micro-ROS Agent IP (can be found by `ifconfig` command)
+* Configure the micro-ROS settings using ```idf.py menuconfig```
+    
+    * Inside micro-ROS Settings Set up WiFi configuration (SSID and Password)
+    * IP address of host PC in micro-ROS Agent IP (can be found by `ifconfig` command)
+    * Make sure micro_ros port is same as given to the agent in previous command.
 
 **Note** If it shows the error `ifconfig: command not found`, install the package `net-tools` by following command:
 
@@ -37,20 +39,20 @@ sudo apt install net-tools
 
 
 
-* In another terminal, Navigate to the ROS2 workspace and Start the Publisher by executing the relevant python script after sourcing the environment
+* In another terminal, Navigate to the ROS2 workspace and Start the Publisher by executing the relevant python script after sourcing ros2 in the environment
 (Make sure you have previously built the folder by executing `colcon build` command with 4_simulation_gazebo in the src folder):
 
 ```bash
-cd ros2_ws/
+cd ros2_ws
+source install/setup.bash
+ros2 launch simulation_gazebo basic_gazebo.launch.py
+```
+This will open a gazebo simulation window.
+Now we run kinematics scripts on the bot. Open a new terminal and run following commands.
+```bash
+cd ros2_ws
 source install/setup.bash
 ros2 run simulation_gazebo forward_kinematics.py
-```
-* You can also run inverse_kinematics.py using above command
-
-**Note**:- If it shows the error that script is not executable, run the following command in the directory where the script is present.
-
-```bash
-sudo chmod +x forward_kinematics.py
 ```
 
 * Enter the angles on the publisher side and voila! See your manipulator moving!

@@ -29,7 +29,7 @@ find_package(robot_state_publisher REQUIRED)
 #   DESTINATION lib/${PROJECT_NAME}
 # )
 install(PROGRAMS
-  scripts/forward_kinematics.py scripts/inverse_kinematics.py
+  scripts/forward_kinematics.py scripts/inverse_kinematics.py scripts/forward_kinematics_module.py scripts/inverse_kinematics_module.py
   DESTINATION lib/${PROJECT_NAME}
 )
 install(

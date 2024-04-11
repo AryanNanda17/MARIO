@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 # MIT License
 
 # Copyright (c) 2024 Society of Robotics and Automation
