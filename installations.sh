@@ -114,7 +114,7 @@ case "${unameOut}" in
 
             # Install additional ROS 2 packages 
             echo "Installing Additional Ros2 packages"
-            sudo apt install -y ros-humble-control-msgs ros-humble-control-toolbox ros-humble-joint-state-broadcaster ros-humble-joint-state-publisher ros-humble-joint-state-publisher-gui ros-humble-forward-command-controller ros-humble-robot-state-publisher ros-humble-gazebo-ros2-control ros-humble-robot-controllers ros-humble-robot-controllers-interface ros-humble-robot-controllers-msgs ros-humble-joint-trajectory-controller ros-humble-controller-manager ros-humble-controller-manager-msgs ros-humble-ros2-control
+            sudo apt install -y ros-humble-control-msgs ros-humble-control-toolbox ros-humble-joint-state-broadcaster ros-humble-joint-state-publisher ros-humble-joint-state-publisher-gui ros-humble-forward-command-controller ros-humble-robot-state-publisher ros-humble-gazebo-ros2-control ros-humble-robot-controllers ros-humble-robot-controllers-interface ros-humble-robot-controllers-msgs ros-humble-joint-trajectory-controller ros-humble-controller-manager ros-humble-controller-manager-msgs ros-humble-ros2-control ros-humble-gazebo-ros-pkgs ros-humble-gazebo-ros-dbgsym
             echo "${red}======================$reset"
             echo "ROS 2 installed successfully."
             echo "${red}======================$reset"
@@ -157,7 +157,7 @@ case "${unameOut}" in
             conda config --env --remove channels defaults || true
             # Install ROS packages
             mamba install ros-humble-desktop-full
-            mamba install -n ros_env -y ros-humble-control-msgs ros-humble-control-toolbox ros-humble-joint-state-broadcaster ros-humble-joint-state-publisher ros-humble-joint-state-publisher-gui ros-humble-forward-command-controller ros-humble-robot-state-publisher ros-humble-controller-manager ros-humble-controller-manager-msgs ros-humble-joint-trajectory-controller ros-humble-ros2-control
+            mamba install -n ros_env -y ros-humble-control-msgs ros-humble-control-toolbox ros-humble-joint-state-broadcaster ros-humble-joint-state-publisher ros-humble-joint-state-publisher-gui ros-humble-forward-command-controller ros-humble-robot-state-publisher ros-humble-controller-manager ros-humble-controller-manager-msgs ros-humble-joint-trajectory-controller ros-humble-ros2-control 
             mamba install catkin_tools
             echo "${red}======================$reset"
             echo "ROS 2 installed successfully."
