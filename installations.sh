@@ -257,10 +257,10 @@ else
     echo "$green Ros folders are already copied $reset"
 fi
 cd ..
-if [ "$unameOut" == "Darwin" ];
+if [ "$unameOut" == "Darwin" ]; then
     source $HOME/mambaforge/etc/profile.d/conda.sh
+    conda activate ros_env
 fi
-conda activate ros_env
 colcon build
 echo "${red}======================$reset"
 echo "Successfully copied mario's folders to ros2_ws"
