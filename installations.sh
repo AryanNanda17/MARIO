@@ -116,6 +116,7 @@ case "${unameOut}" in
             echo "${red}======================$reset"
             echo "ROS 2 installed successfully."
             echo "${red}======================$reset"
+
         else
             echo "${red}======================$reset"
             echo "ROS 2 is already installed."
@@ -159,6 +160,7 @@ case "${unameOut}" in
             echo "${red}======================$reset"
             echo "ROS 2 installed successfully."
             echo "${red}======================$reset"
+            source $HOME/."$_shell_"rc
         ;;
     *)
         echo "ROS 2 installation is not supported on this operating system."
