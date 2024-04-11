@@ -178,7 +178,7 @@ else
             echo "Creating a ros2_ws"
             echo "${red}======================$reset"
             sudo apt update 
-            sudo apt install python3-colcon-common-extensions rosdep
+            sudo apt install python3-colcon-common-extensions 
             echo "source  /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> $HOME/."$_shell_"rc
             mkdir $HOME/ros2_ws
             cd $HOME/ros2_ws
