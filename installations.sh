@@ -9,7 +9,7 @@ reset=`tput sgr0`
 
 echo "Installing ESP IDF"
 
-_shell_="${SHELL#${SHELL%/*}/}"
+_shell_="${0##*/}"
 # Check whether esp-idf has already been installed
 if [ -d $HOME/esp/esp-idf ]; then
     echo "${red}======================$reset"
