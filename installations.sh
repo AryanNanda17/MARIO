@@ -66,7 +66,7 @@ else
 fi
 echo "$reset"
 # Clone Mario repository if not already cloned
-if [ ! -d "$HOME/MARIO" ]; then
+if [ ! -d $HOME/MARIO ]; then
     echo "${blue}======================$reset"
     echo "Cloning Mario"
     echo "${red}======================$reset"
