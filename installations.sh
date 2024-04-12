@@ -272,6 +272,7 @@ case "${unameOut}" in
     Linux*)
         echo "Cloning microrosagent"
         cd $HOME/ros2_ws/src
+        git clone -b humble https://github.com/micro-ROS/micro-ROS-Agent.git
         cd ..
         pip3 install catkin_pkg lark-parser colcon-common-extensions 
         rosdep install --from-paths src --ignore-src -y
